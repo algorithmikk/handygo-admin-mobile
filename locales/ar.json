@@ -1,0 +1,113 @@
+{
+  "app": { "name": "HandyGo", "tagline": "إدارة العقارات" },
+  "auth": {
+    "login": "تسجيل الدخول",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "loginError": "بريد إلكتروني أو كلمة مرور غير صالحة",
+    "subtitle": "بوابة الإدارة"
+  },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "totalRequests": "إجمالي الطلبات",
+    "pending": "قيد الانتظار",
+    "activeJobs": "المهام النشطة",
+    "completedToday": "مكتمل اليوم",
+    "handymen": "الفنيون",
+    "available": "متاح",
+    "tenants": "المستأجرون",
+    "monthlySpend": "الإنفاق الشهري",
+    "recentRequests": "الطلبات الأخيرة",
+    "activeJobsList": "المهام النشطة",
+    "viewAll": "عرض الكل",
+    "noRecentRequests": "لا توجد طلبات حديثة",
+    "noActiveJobs": "لا توجد مهام نشطة"
+  },
+  "requests": {
+    "title": "الطلبات",
+    "all": "الكل",
+    "pending": "قيد الانتظار",
+    "assigned": "تم التعيين",
+    "inProgress": "قيد التنفيذ",
+    "completed": "مكتمل",
+    "cancelled": "ملغى",
+    "search": "بحث في الطلبات...",
+    "noRequests": "لا توجد طلبات",
+    "assignHandyman": "تعيين فني",
+    "changePriority": "تغيير الأولوية",
+    "cancel": "إلغاء الطلب",
+    "requestDetails": "تفاصيل الطلب",
+    "tenant": "المستأجر",
+    "property": "العقار",
+    "category": "الفئة",
+    "priority": "الأولوية",
+    "status": "الحالة",
+    "created": "تاريخ الإنشاء",
+    "description": "الوصف",
+    "estimatedCost": "التكلفة المقدرة",
+    "assignedTo": "معين إلى",
+    "selectHandyman": "اختر فنياً"
+  },
+  "handymen": {
+    "title": "الفنيون",
+    "online": "متصل",
+    "offline": "غير متصل",
+    "search": "بحث عن فني...",
+    "noHandymen": "لا يوجد فنيون",
+    "rating": "التقييم",
+    "jobs": "المهام",
+    "services": "الخدمات",
+    "contact": "الاتصال",
+    "viewProfile": "عرض الملف"
+  },
+  "tenants": {
+    "title": "المستأجرون",
+    "search": "بحث عن مستأجر...",
+    "noTenants": "لا يوجد مستأجرون",
+    "property": "العقار",
+    "unit": "الوحدة",
+    "requests": "الطلبات"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "profile": "الملف الشخصي",
+    "company": "معلومات الشركة",
+    "notifications": "الإشعارات",
+    "language": "اللغة",
+    "support": "الدعم",
+    "logout": "تسجيل الخروج",
+    "version": "الإصدار"
+  },
+  "common": {
+    "aed": "درهم",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "save": "حفظ",
+    "back": "رجوع",
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ ما",
+    "retry": "إعادة المحاولة"
+  },
+  "categories": {
+    "plumbing": "سباكة",
+    "electrical": "كهرباء",
+    "ac": "تكييف",
+    "general": "عام"
+  },
+  "priority": {
+    "low": "منخفضة",
+    "medium": "متوسطة",
+    "high": "عالية",
+    "urgent": "عاجلة"
+  },
+  "status": {
+    "pending": "قيد الانتظار",
+    "assigned": "تم التعيين",
+    "accepted": "مقبول",
+    "in_progress": "قيد التنفيذ",
+    "completed": "مكتمل",
+    "cancelled": "ملغى"
+  }
+}
+

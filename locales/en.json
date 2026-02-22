@@ -1,0 +1,113 @@
+{
+  "app": { "name": "HandyGo", "tagline": "Property Management" },
+  "auth": {
+    "login": "Sign In",
+    "email": "Email Address",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "loginError": "Invalid email or password",
+    "subtitle": "Management Portal"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "totalRequests": "Total Requests",
+    "pending": "Pending",
+    "activeJobs": "Active Jobs",
+    "completedToday": "Completed Today",
+    "handymen": "Handymen",
+    "available": "Available",
+    "tenants": "Tenants",
+    "monthlySpend": "Monthly Spend",
+    "recentRequests": "Recent Requests",
+    "activeJobsList": "Active Jobs",
+    "viewAll": "View All",
+    "noRecentRequests": "No recent requests",
+    "noActiveJobs": "No active jobs"
+  },
+  "requests": {
+    "title": "Requests",
+    "all": "All",
+    "pending": "Pending",
+    "assigned": "Assigned",
+    "inProgress": "In Progress",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "search": "Search requests...",
+    "noRequests": "No requests found",
+    "assignHandyman": "Assign Handyman",
+    "changePriority": "Change Priority",
+    "cancel": "Cancel Request",
+    "requestDetails": "Request Details",
+    "tenant": "Tenant",
+    "property": "Property",
+    "category": "Category",
+    "priority": "Priority",
+    "status": "Status",
+    "created": "Created",
+    "description": "Description",
+    "estimatedCost": "Estimated Cost",
+    "assignedTo": "Assigned To",
+    "selectHandyman": "Select a Handyman"
+  },
+  "handymen": {
+    "title": "Handymen",
+    "online": "Online",
+    "offline": "Offline",
+    "search": "Search handymen...",
+    "noHandymen": "No handymen found",
+    "rating": "Rating",
+    "jobs": "Jobs",
+    "services": "Services",
+    "contact": "Contact",
+    "viewProfile": "View Profile"
+  },
+  "tenants": {
+    "title": "Tenants",
+    "search": "Search tenants...",
+    "noTenants": "No tenants found",
+    "property": "Property",
+    "unit": "Unit",
+    "requests": "Requests"
+  },
+  "settings": {
+    "title": "Settings",
+    "profile": "Profile",
+    "company": "Company Info",
+    "notifications": "Notifications",
+    "language": "Language",
+    "support": "Support",
+    "logout": "Log Out",
+    "version": "Version"
+  },
+  "common": {
+    "aed": "AED",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "back": "Back",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry"
+  },
+  "categories": {
+    "plumbing": "Plumbing",
+    "electrical": "Electrical",
+    "ac": "AC / HVAC",
+    "general": "General"
+  },
+  "priority": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "urgent": "Urgent"
+  },
+  "status": {
+    "pending": "Pending",
+    "assigned": "Assigned",
+    "accepted": "Accepted",
+    "in_progress": "In Progress",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  }
+}
+

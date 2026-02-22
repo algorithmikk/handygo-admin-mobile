@@ -1,0 +1,63 @@
+{
+  "expo": {
+    "name": "HandyGo Management",
+    "slug": "handygo-admin-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "handygo-admin",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0f172a"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.handygo.management",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "HandyGo needs your location to show nearby handymen.",
+        "NSCameraUsageDescription": "HandyGo needs camera access for property photos."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#0f172a"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.handygo.management",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "CAMERA",
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-location",
+        { "locationWhenInUsePermission": "HandyGo needs your location to show nearby handymen." }
+      ],
+      [
+        "expo-notifications",
+        { "icon": "./assets/images/icon.png", "color": "#10b981" }
+      ],
+      [
+        "expo-image-picker",
+        { "photosPermission": "HandyGo needs access to photos for property documentation.", "cameraPermission": "HandyGo needs camera access for property photos." }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
