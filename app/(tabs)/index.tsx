@@ -129,13 +129,13 @@ export default function DashboardScreen() {
             <Text style={styles.emptyText}>{t('dashboard.noActiveJobs')}</Text>
           ) : (
             activeJobs.map((job) => {
-              const cat = getCategoryInfo(job.request.category);
+              const cat = getCategoryInfo(job.request?.category || job.category || 'general');
               return (
                 <TouchableOpacity key={job.id} style={styles.jobCard} onPress={() => router.push(`/request/${job.requestId}`)}>
                   <View style={styles.jobTop}>
                     <Text style={styles.catIcon}>{cat?.icon}</Text>
                     <View style={{ flex: 1 }}>
-                      <Text style={styles.jobTitle} numberOfLines={1}>{job.request.description}</Text>
+                      <Text style={styles.jobTitle} numberOfLines={1}>{job.request?.description || job.description || 'Job'}</Text>
                       <Text style={styles.jobHandyman}>{job.handymanName}</Text>
                     </View>
                     <View style={[styles.statusBadge, { backgroundColor: (STATUS_COLORS[job.status] || '#666') + '20' }]}>

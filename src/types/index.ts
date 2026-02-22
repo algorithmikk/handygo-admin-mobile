@@ -76,16 +76,21 @@ export interface MaintenanceRequest {
 export interface Job {
   id: string;
   requestId: string;
-  request: MaintenanceRequest;
+  request?: MaintenanceRequest;
   handymanId: string;
   handymanName?: string;
   status: JobStatus;
+  category?: ServiceCategory;
+  description?: string;
+  propertyAddress?: string;
+  tenantName?: string;
+  createdAt?: string;
   acceptedAt?: string;
   startedAt?: string;
   completedAt?: string;
-  totalCost: number;
-  platformFee: number;
-  handymanPayout: number;
+  totalCost?: number;
+  platformFee?: number;
+  handymanPayout?: number;
 }
 
 export interface DashboardStats {
