@@ -25,7 +25,7 @@ export default function TenantsScreen() {
   const onRefresh = useCallback(async () => { setRefreshing(true); await loadTenants(); setRefreshing(false); }, []);
 
   const filtered = tenants.filter(t =>
-    !search || t.name.toLowerCase().includes(search.toLowerCase()) || t.propertyAddress.toLowerCase().includes(search.toLowerCase())
+    !search || t.name.toLowerCase().includes(search.toLowerCase()) || (t.propertyAddress || '').toLowerCase().includes(search.toLowerCase())
   );
 
   return (

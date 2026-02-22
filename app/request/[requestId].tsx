@@ -111,7 +111,7 @@ export default function RequestDetailScreen() {
           </TouchableOpacity>
           <View style={styles.infoRow}>
             <MapPin size={16} color={Colors.gray[400]} />
-            <Text style={styles.infoText}>{request.propertyAddress}</Text>
+            <Text style={styles.infoText}>{request.propertyAddress || 'No address provided'}</Text>
           </View>
         </View>
 

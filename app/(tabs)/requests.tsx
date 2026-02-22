@@ -100,7 +100,7 @@ export default function RequestsScreen() {
                   <View style={styles.cardBottom}>
                     <View style={styles.cardMeta}>
                       <MapPin size={12} color={Colors.gray[500]} />
-                      <Text style={styles.metaText} numberOfLines={1}>{req.propertyAddress.split(',')[0]}</Text>
+                      <Text style={styles.metaText} numberOfLines={1}>{(req.propertyAddress || 'No address').split(',')[0]}</Text>
                     </View>
                     <View style={styles.cardMeta}>
                       <Clock size={12} color={Colors.gray[500]} />

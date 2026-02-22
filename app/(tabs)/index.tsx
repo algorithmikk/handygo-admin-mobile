@@ -105,7 +105,7 @@ export default function DashboardScreen() {
                     <Text style={styles.catIcon}>{cat?.icon}</Text>
                     <View style={styles.requestInfo}>
                       <Text style={styles.requestTitle} numberOfLines={1}>{req.description}</Text>
-                      <Text style={styles.requestSub}>{req.tenantName} · {req.propertyAddress.split(',')[0]}</Text>
+                      <Text style={styles.requestSub}>{req.tenantName || 'Tenant'} · {(req.propertyAddress || 'No address').split(',')[0]}</Text>
                     </View>
                   </View>
                   <View style={styles.requestRight}>
