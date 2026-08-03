@@ -38,6 +38,7 @@ export interface Handyman {
   available: boolean;
   rating: number;
   completedJobs: number;
+  status?: string;
   lat?: number;
   lng?: number;
 }

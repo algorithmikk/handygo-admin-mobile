@@ -1,68 +1,44 @@
 import * as SecureStore from 'expo-secure-store';
 import { api } from '../lib/api';
-import type { LoginRequest, AuthResponse, User, Company } from '../types';
+import type { LoginRequest, User, Company } from '../types';
 
 const TOKEN_KEY = 'handygo_admin_token';
 const USER_KEY = 'handygo_admin_user';
 const COMPANY_KEY = 'handygo_admin_company';
 
-// Mock data for development
-const MOCK_USER: User = {
-  id: 'admin-1',
-  email: 'admin@handygo.ae',
-  firstName: 'Property',
-  lastName: 'Manager',
-  phone: '+971501234567',
-  role: 'ADMIN',
-  createdAt: new Date().toISOString(),
-};
-
-const MOCK_COMPANY: Company = {
-  id: 'comp-1',
-  name: 'Dubai Marina Properties',
-  adminUserId: 'admin-1',
-  email: 'admin@handygo.ae',
-  phone: '+971501234567',
-  address: 'Dubai Marina, Dubai, UAE',
-  propertiesCount: 15,
-  tenantsCount: 34,
-  createdAt: new Date().toISOString(),
-};
+const allowMock =
+  process.env.EXPO_PUBLIC_ALLOW_MOCK_AUTH === 'true' ||
+  process.env.NODE_ENV === 'development';
 
 export const authService = {
   async login(credentials: LoginRequest): Promise<{ user: User; company?: Company }> {
-    try {
-      const response = await api.post<any>('/auth/login', credentials);
-      if (response.data && !response.error) {
-        const d = response.data;
-        // Handle both flat response and { token, user } response from backend
-        const userData = d.user || d;
-        const user: User = {
-          id: userData.id, email: userData.email,
-          firstName: userData.firstName, lastName: userData.lastName,
-          phone: userData.phoneNumber || userData.phone, role: userData.role || 'ADMIN',
-          createdAt: userData.createdAt,
-        };
-        const token = d.token || `backend-${user.id}`;
-        await SecureStore.setItemAsync(TOKEN_KEY, token);
-        await SecureStore.setItemAsync(USER_KEY, JSON.stringify(user));
-        if (d.company) {
-          await SecureStore.setItemAsync(COMPANY_KEY, JSON.stringify(d.company));
-        }
-        return { user, company: d.company };
-      }
+    const response = await api.post<any>('/auth/login', credentials);
+    if (response.error || !response.data) {
       throw new Error(response.error || 'Login failed');
-    } catch {
-      // Mock fallback for development
-      if (credentials.email === 'admin@handygo.ae' && credentials.password === 'admin123') {
-        const mockToken = 'mock-admin-token-' + Date.now();
-        await SecureStore.setItemAsync(TOKEN_KEY, mockToken);
-        await SecureStore.setItemAsync(USER_KEY, JSON.stringify(MOCK_USER));
-        await SecureStore.setItemAsync(COMPANY_KEY, JSON.stringify(MOCK_COMPANY));
-        return { user: MOCK_USER, company: MOCK_COMPANY };
-      }
-      throw new Error('Invalid email or password');
     }
+    const d = response.data;
+    const userData = d.user || d;
+    if (String(userData.role).toUpperCase() !== 'ADMIN') {
+      throw new Error('Admin account required');
+    }
+    if (!d.token) {
+      throw new Error('No auth token returned from server');
+    }
+    const user: User = {
+      id: userData.id,
+      email: userData.email,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      phone: userData.phoneNumber || userData.phone,
+      role: userData.role || 'ADMIN',
+      createdAt: userData.createdAt,
+    };
+    await SecureStore.setItemAsync(TOKEN_KEY, d.token);
+    await SecureStore.setItemAsync(USER_KEY, JSON.stringify(user));
+    if (d.company) {
+      await SecureStore.setItemAsync(COMPANY_KEY, JSON.stringify(d.company));
+    }
+    return { user, company: d.company };
   },
 
   async getToken(): Promise<string | null> {
@@ -89,5 +65,9 @@ export const authService = {
     const token = await SecureStore.getItemAsync(TOKEN_KEY);
     return !!token;
   },
-};
 
+  /** Dev-only helper — never used in production builds without EXPO_PUBLIC_ALLOW_MOCK_AUTH */
+  isMockAllowed(): boolean {
+    return allowMock;
+  },
+};

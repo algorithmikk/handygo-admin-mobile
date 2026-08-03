@@ -1,9 +1,7 @@
 import { api } from '../lib/api';
 import { authService } from './authService';
-import { MOCK_STATS, MOCK_REQUESTS, MOCK_JOBS } from '../lib/mockData';
 import type { DashboardStats, MaintenanceRequest, Job, ServiceCategory, RequestStatus, RequestPriority } from '../types';
 
-// Map backend response to frontend types
 function mapRequest(r: any): MaintenanceRequest {
   return {
     id: r.requestId || r.id || '',
@@ -48,7 +46,6 @@ function mapJob(r: any): Job {
     totalCost: r.totalCost || r.quotedAmount || 0,
     platformFee: r.platformFee || 0,
     handymanPayout: r.handymanPayout || 0,
-    // Build a minimal request object for dashboard rendering
     request: {
       id: r.requestId || '',
       tenantId: r.tenantId || '',
@@ -69,40 +66,31 @@ function mapJob(r: any): Job {
 
 export const dashboardService = {
   async getStats(): Promise<DashboardStats> {
-    try {
-      const token = await authService.getToken();
-      const response = await api.get<DashboardStats>('/requests/stats', token);
-      if (response.data) return response.data;
-      throw new Error(response.error || 'Failed to fetch');
-    } catch {
-      return MOCK_STATS;
+    const token = await authService.getToken();
+    const response = await api.get<DashboardStats>('/requests/stats', token);
+    if (response.error || !response.data) {
+      throw new Error(response.error || 'Failed to fetch stats');
     }
+    return response.data;
   },
 
   async getRecentRequests(): Promise<MaintenanceRequest[]> {
-    try {
-      const token = await authService.getToken();
-      const response = await api.get<any[]>('/requests', token);
-      if (response.data && Array.isArray(response.data)) {
-        return response.data.map(mapRequest).slice(0, 5);
-      }
-      throw new Error(response.error || 'Failed to fetch');
-    } catch {
-      return MOCK_REQUESTS.slice(0, 3);
+    const token = await authService.getToken();
+    const response = await api.get<any[]>('/requests', token);
+    if (response.error || !response.data) {
+      throw new Error(response.error || 'Failed to fetch requests');
     }
+    return (Array.isArray(response.data) ? response.data : []).map(mapRequest).slice(0, 5);
   },
 
   async getActiveJobs(): Promise<Job[]> {
-    try {
-      const token = await authService.getToken();
-      const response = await api.get<any[]>('/jobs/available', token);
-      if (response.data && Array.isArray(response.data)) {
-        return response.data.map(mapJob);
-      }
-      throw new Error(response.error || 'Failed to fetch');
-    } catch {
-      return MOCK_JOBS.filter(j => j.status !== 'completed');
+    const token = await authService.getToken();
+    const response = await api.get<any[]>('/jobs', token);
+    if (response.error || !response.data) {
+      throw new Error(response.error || 'Failed to fetch jobs');
     }
+    return (Array.isArray(response.data) ? response.data : [])
+      .map(mapJob)
+      .filter((j) => j.status !== 'completed' && j.status !== 'cancelled');
   },
 };
-

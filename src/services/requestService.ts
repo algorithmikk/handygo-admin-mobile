@@ -1,9 +1,7 @@
 import { api } from '../lib/api';
 import { authService } from './authService';
-import { MOCK_REQUESTS } from '../lib/mockData';
 import type { MaintenanceRequest, RequestStatus, ServiceCategory, RequestPriority } from '../types';
 
-// Map backend MaintenanceRequest to frontend format
 function mapRequest(r: any): MaintenanceRequest {
   return {
     id: r.requestId || r.id || '',
@@ -29,61 +27,43 @@ function mapRequest(r: any): MaintenanceRequest {
 
 export const requestService = {
   async getRequests(status?: RequestStatus): Promise<MaintenanceRequest[]> {
-    try {
-      const token = await authService.getToken();
-      const endpoint = status ? `/requests?status=${status}` : '/requests';
-      const response = await api.get<any[]>(endpoint, token);
-      if (response.data) return (Array.isArray(response.data) ? response.data : []).map(mapRequest);
-      throw new Error(response.error || 'Failed to fetch');
-    } catch {
-      // Mock fallback
-      if (status) return MOCK_REQUESTS.filter(r => r.status === status);
-      return MOCK_REQUESTS;
+    const token = await authService.getToken();
+    const endpoint = status ? `/requests?status=${status}` : '/requests';
+    const response = await api.get<any[]>(endpoint, token);
+    if (response.error || !response.data) {
+      throw new Error(response.error || 'Failed to fetch requests');
     }
+    return (Array.isArray(response.data) ? response.data : []).map(mapRequest);
   },
 
   async getRequest(id: string): Promise<MaintenanceRequest | null> {
-    try {
-      const token = await authService.getToken();
-      const response = await api.get<any>(`/requests/${id}`, token);
-      if (response.data) return mapRequest(response.data);
-      throw new Error(response.error || 'Failed to fetch');
-    } catch {
-      return MOCK_REQUESTS.find(r => r.id === id) || null;
+    const token = await authService.getToken();
+    const response = await api.get<any>(`/requests/${id}`, token);
+    if (response.error || !response.data) {
+      throw new Error(response.error || 'Failed to fetch request');
     }
+    return mapRequest(response.data);
   },
 
   async assignHandyman(requestId: string, handymanId: string, handymanName?: string): Promise<void> {
-    try {
-      const token = await authService.getToken();
-      // Backend uses PUT for assign, expects { handymanId, handymanName }
-      const response = await api.put(`/requests/${requestId}/assign`, { handymanId, handymanName: handymanName || 'Handyman' }, token);
-      if (response.error) throw new Error(response.error);
-    } catch {
-      console.log(`Mock: Assigned handyman ${handymanId} to request ${requestId}`);
-    }
+    const token = await authService.getToken();
+    const response = await api.put(
+      `/requests/${requestId}/assign`,
+      { handymanId, handymanName: handymanName || 'Handyman' },
+      token,
+    );
+    if (response.error) throw new Error(response.error);
   },
 
   async updatePriority(requestId: string, priority: string): Promise<void> {
-    try {
-      const token = await authService.getToken();
-      // Backend uses PUT for updates
-      const response = await api.put(`/requests/${requestId}`, { priority }, token);
-      if (response.error) throw new Error(response.error);
-    } catch {
-      console.log(`Mock: Updated priority of ${requestId} to ${priority}`);
-    }
+    const token = await authService.getToken();
+    const response = await api.put(`/requests/${requestId}`, { priority }, token);
+    if (response.error) throw new Error(response.error);
   },
 
   async cancelRequest(requestId: string): Promise<void> {
-    try {
-      const token = await authService.getToken();
-      // Backend uses PUT for cancel at /requests/{id}/cancel
-      const response = await api.put(`/requests/${requestId}/cancel`, {}, token);
-      if (response.error) throw new Error(response.error);
-    } catch {
-      console.log(`Mock: Cancelled request ${requestId}`);
-    }
+    const token = await authService.getToken();
+    const response = await api.put(`/requests/${requestId}/cancel`, {}, token);
+    if (response.error) throw new Error(response.error);
   },
 };
-
