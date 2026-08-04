@@ -32,19 +32,28 @@ export default function RequestDetailScreen() {
     finally { setLoading(false); }
   };
 
-  const handleAssign = async (handymanId: string) => {
-    await requestService.assignHandyman(requestId || '', handymanId);
-    Alert.alert('Success', 'Handyman assigned successfully');
-    setShowAssign(false);
-    await loadData();
+  const handleAssign = async (handymanId: string, handymanName: string) => {
+    try {
+      await requestService.assignHandyman(requestId || '', handymanId, handymanName);
+      Alert.alert(t('common.confirm'), t('requests.assignSuccess'));
+      setShowAssign(false);
+      await loadData();
+    } catch (e: any) {
+      Alert.alert(t('common.error'), e?.message || t('requests.assignError'));
+    }
   };
 
   const handlePriorityChange = (priority: RequestPriority) => {
-    Alert.alert('Change Priority', `Set priority to ${priority}?`, [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Confirm', onPress: async () => {
-        await requestService.updatePriority(requestId || '', priority);
-        await loadData();
+    Alert.alert(t('requests.changePriority'), `${priority}?`, [
+      { text: t('common.cancel'), style: 'cancel' },
+      { text: t('common.confirm'), onPress: async () => {
+        try {
+          await requestService.updatePriority(requestId || '', priority);
+          Alert.alert(t('common.confirm'), t('requests.prioritySuccess'));
+          await loadData();
+        } catch (e: any) {
+          Alert.alert(t('common.error'), e?.message || t('requests.priorityError'));
+        }
       }},
     ]);
   };
@@ -152,7 +161,7 @@ export default function RequestDetailScreen() {
           <View style={styles.handymenList}>
             <Text style={styles.sectionLabel}>{t('requests.selectHandyman')}</Text>
             {handymen.map(h => (
-              <TouchableOpacity key={h.id} style={styles.handymanCard} onPress={() => handleAssign(h.id)}>
+              <TouchableOpacity key={h.id} style={styles.handymanCard} onPress={() => handleAssign(h.id, h.name)}>
                 <View style={styles.avatar}><Text style={styles.avatarText}>{h.name.charAt(0)}</Text></View>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.handymanName}>{h.name}</Text>
@@ -181,7 +190,7 @@ const styles = StyleSheet.create({
   statusText: { fontSize: 12, fontWeight: '700', textTransform: 'uppercase' },
   priorityBadge: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8 },
   priorityText: { fontSize: 12, fontWeight: '700', textTransform: 'uppercase' },
-  card: { marginHorizontal: 20, marginBottom: 12, padding: 16, backgroundColor: Colors.slate[800], borderRadius: 16, borderWidth: 1, borderColor: Colors.gray[700] },
+  card: { marginHorizontal: 20, marginBottom: 12, padding: 16, backgroundColor: Colors.slate[800], borderRadius: 14, borderWidth: 1, borderColor: Colors.gray[700] },
   catRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 },
   catIcon: { fontSize: 22 },
   catLabel: { fontSize: 16, fontWeight: '600', color: Colors.white },
@@ -197,14 +206,14 @@ const styles = StyleSheet.create({
   avatarText: { fontSize: 14, fontWeight: 'bold', color: Colors.primary[400] },
   assignedName: { fontSize: 15, fontWeight: '600', color: Colors.white, flex: 1 },
   actions: { marginHorizontal: 20, marginBottom: 16 },
-  assignBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, padding: 14, backgroundColor: Colors.primary[500], borderRadius: 12, marginBottom: 16 },
-  assignBtnText: { fontSize: 15, fontWeight: '600', color: Colors.white },
+  assignBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, height: 52, backgroundColor: Colors.primary[500], borderRadius: 14, marginBottom: 16 },
+  assignBtnText: { fontSize: 15, fontWeight: '700', color: Colors.white },
   changePriorityLabel: { fontSize: 12, fontWeight: '700', color: Colors.gray[400], letterSpacing: 0.5, marginBottom: 8 },
   priorityRow: { flexDirection: 'row', gap: 8 },
   prioBtn: { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center', borderWidth: 1 },
   prioBtnText: { fontSize: 12, fontWeight: '600', textTransform: 'capitalize' },
   handymenList: { marginHorizontal: 20 },
-  handymanCard: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14, backgroundColor: Colors.slate[800], borderRadius: 12, borderWidth: 1, borderColor: Colors.gray[700], marginBottom: 8 },
+  handymanCard: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14, backgroundColor: Colors.slate[800], borderRadius: 14, borderWidth: 1, borderColor: Colors.gray[700], marginBottom: 8 },
   handymanName: { fontSize: 15, fontWeight: '600', color: Colors.white },
   handymanSub: { fontSize: 12, color: Colors.gray[400], marginTop: 2 },
   selectText: { fontSize: 13, fontWeight: '600', color: Colors.primary[400] },

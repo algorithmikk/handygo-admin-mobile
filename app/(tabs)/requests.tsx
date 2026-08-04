@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, ScrollView, RefreshControl, T
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Search, MapPin, Clock, AlertTriangle } from 'lucide-react-native';
+import { Search, MapPin, Clock, ClipboardList } from 'lucide-react-native';
 import { requestService } from '@/src/services/requestService';
 import { getCategoryInfo, PRIORITY_COLORS, STATUS_COLORS } from '@/src/lib/mockData';
 import { Colors } from '@/constants/Colors';
@@ -77,8 +77,11 @@ export default function RequestsScreen() {
         <ScrollView style={styles.list} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary[400]} />}>
           {filtered.length === 0 ? (
             <View style={styles.empty}>
-              <AlertTriangle size={32} color={Colors.gray[600]} />
-              <Text style={styles.emptyText}>{t('requests.noRequests')}</Text>
+              <View style={styles.emptyIcon}>
+                <ClipboardList size={32} color={Colors.gray[600]} />
+              </View>
+              <Text style={styles.emptyTitle}>{t('requests.noRequests')}</Text>
+              <Text style={styles.emptyHint}>{t('requests.emptyHint')}</Text>
             </View>
           ) : (
             filtered.map(req => {
@@ -139,8 +142,10 @@ const styles = StyleSheet.create({
   filterText: { fontSize: 13, color: Colors.gray[400], fontWeight: '500' },
   filterTextActive: { color: Colors.primary[400] },
   list: { flex: 1 },
-  empty: { alignItems: 'center', paddingVertical: 48, gap: 12 },
-  emptyText: { fontSize: 15, color: Colors.gray[500] },
+  empty: { alignItems: 'center', paddingVertical: 56, paddingHorizontal: 32, gap: 8 },
+  emptyIcon: { width: 64, height: 64, borderRadius: 32, backgroundColor: Colors.slate[800], borderWidth: 1, borderColor: Colors.gray[700], alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
+  emptyTitle: { fontSize: 16, fontWeight: '600', color: Colors.gray[400], textAlign: 'center' },
+  emptyHint: { fontSize: 14, color: Colors.gray[500], textAlign: 'center', lineHeight: 20 },
   card: { marginHorizontal: 20, marginBottom: 10, padding: 14, backgroundColor: Colors.slate[800], borderRadius: 14, borderWidth: 1, borderColor: Colors.gray[700] },
   cardTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 },
   cardLeft: { flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 },

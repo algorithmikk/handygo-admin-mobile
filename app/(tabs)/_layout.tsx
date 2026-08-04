@@ -1,9 +1,12 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { LayoutDashboard, ClipboardList, Wrench, Users, Settings } from 'lucide-react-native';
 import { Colors } from '@/constants/Colors';
 
 export default function TabLayout() {
+  const { t } = useTranslation();
+
   return (
     <Tabs
       screenOptions={{
@@ -23,35 +26,35 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Dashboard',
+          title: t('tabs.dashboard'),
           tabBarIcon: ({ color, size }) => <LayoutDashboard size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="requests"
         options={{
-          title: 'Requests',
+          title: t('tabs.requests'),
           tabBarIcon: ({ color, size }) => <ClipboardList size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="handymen"
         options={{
-          title: 'Handymen',
+          title: t('tabs.handymen'),
           tabBarIcon: ({ color, size }) => <Wrench size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="tenants"
         options={{
-          title: 'Tenants',
+          title: t('tabs.tenants'),
           tabBarIcon: ({ color, size }) => <Users size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
-          title: 'Settings',
+          title: t('tabs.settings'),
           tabBarIcon: ({ color, size }) => <Settings size={size} color={color} />,
         }}
       />

@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Switch, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { User, Building2, Bell, Globe, ChevronRight, LogOut, HelpCircle } from 'lucide-react-native';
+import { User, Building2, Bell, Globe, ChevronRight, LogOut, HelpCircle, CreditCard } from 'lucide-react-native';
 import { useAuth } from '@/src/context/AuthContext';
+import { billingService, type SubscriptionInfo } from '@/src/services/billingService';
 import { Colors } from '@/constants/Colors';
 
 export default function SettingsScreen() {
   const { t, i18n } = useTranslation();
   const { user, company, logout } = useAuth();
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [subscription, setSubscription] = useState<SubscriptionInfo | null>(null);
+
+  useEffect(() => {
+    billingService.getSubscription().then(setSubscription).catch(() => {
+      setSubscription({ active: false, status: 'none' });
+    });
+  }, []);
+
+  const subscriptionStatusKey = subscription?.active
+    ? 'billing.status.active'
+    : `billing.status.${(subscription?.status || 'none').toLowerCase().replace(/ /g, '_')}`;
 
   const handleLogout = () => {
     Alert.alert(t('settings.logout'), 'Are you sure you want to log out?', [
@@ -45,6 +57,18 @@ export default function SettingsScreen() {
 
         {/* Settings List */}
         <View style={styles.section}>
+          <View style={styles.settingItem}>
+            <View style={styles.settingLeft}>
+              <CreditCard size={20} color={Colors.gray[400]} />
+              <Text style={styles.settingLabel}>{t('settings.subscription')}</Text>
+            </View>
+            <View style={[styles.subBadge, subscription?.active ? styles.subActive : styles.subInactive]}>
+              <Text style={[styles.subBadgeText, subscription?.active ? styles.subActiveText : styles.subInactiveText]}>
+                {t(subscriptionStatusKey)}
+              </Text>
+            </View>
+          </View>
+
           <TouchableOpacity style={styles.settingItem}>
             <View style={styles.settingLeft}>
               <User size={20} color={Colors.gray[400]} />
@@ -121,6 +145,12 @@ const styles = StyleSheet.create({
   settingLabel: { fontSize: 15, color: Colors.white },
   settingRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   settingValue: { fontSize: 14, color: Colors.gray[400] },
+  subBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
+  subActive: { backgroundColor: Colors.primary[500] + '20' },
+  subInactive: { backgroundColor: Colors.amber[500] + '20' },
+  subBadgeText: { fontSize: 12, fontWeight: '600', textTransform: 'uppercase' },
+  subActiveText: { color: Colors.primary[400] },
+  subInactiveText: { color: Colors.amber[400] },
   logoutButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, marginHorizontal: 20, padding: 16, backgroundColor: Colors.red[400] + '15', borderRadius: 12, borderWidth: 1, borderColor: Colors.red[400] + '30' },
   logoutText: { fontSize: 16, fontWeight: '600', color: Colors.red[400] },
   version: { fontSize: 12, color: Colors.gray[600], textAlign: 'center', marginTop: 20 },

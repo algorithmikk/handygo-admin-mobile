@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Building2, ClipboardList, Clock, CheckCircle, Wrench, Users, DollarSign, ChevronRight, AlertTriangle } from 'lucide-react-native';
 import { useAuth } from '@/src/context/AuthContext';
 import { dashboardService } from '@/src/services/dashboardService';
+import { SubscriptionBanner } from '@/src/components/SubscriptionBanner';
 import { getCategoryInfo, PRIORITY_COLORS, STATUS_COLORS } from '@/src/lib/mockData';
 import { Colors } from '@/constants/Colors';
 import type { DashboardStats, MaintenanceRequest, Job } from '@/src/types';
@@ -68,6 +69,8 @@ export default function DashboardScreen() {
           <Text style={styles.welcomeName}>Welcome, {user?.firstName}!</Text>
           <Text style={styles.welcomeSub}>{stats?.totalRequests || 0} total requests · {stats?.totalHandymen || 0} handymen · {stats?.totalTenants || 0} tenants</Text>
         </View>
+
+        <SubscriptionBanner />
 
         {/* Stats Grid */}
         <View style={styles.statsGrid}>
@@ -166,7 +169,7 @@ const styles = StyleSheet.create({
   welcomeName: { fontSize: 18, fontWeight: '600', color: Colors.white },
   welcomeSub: { fontSize: 13, color: Colors.gray[400], marginTop: 4 },
   statsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginHorizontal: 20, marginBottom: 16 },
-  statCard: { width: '47%', backgroundColor: Colors.slate[800], borderRadius: 16, borderWidth: 1, borderColor: Colors.gray[700], padding: 16, alignItems: 'center' },
+  statCard: { width: '47%', backgroundColor: Colors.slate[800], borderRadius: 14, borderWidth: 1, borderColor: Colors.gray[700], padding: 16, alignItems: 'center' },
   statValue: { fontSize: 24, fontWeight: 'bold', color: Colors.white, marginTop: 8 },
   statLabel: { fontSize: 11, color: Colors.gray[400], marginTop: 2 },
   availableBar: { flexDirection: 'row', alignItems: 'center', gap: 8, marginHorizontal: 20, marginBottom: 20, padding: 12, backgroundColor: Colors.primary[500] + '10', borderRadius: 10 },
@@ -176,7 +179,7 @@ const styles = StyleSheet.create({
   sectionTitle: { fontSize: 14, fontWeight: '700', color: Colors.gray[400], letterSpacing: 0.5 },
   viewAll: { fontSize: 13, color: Colors.primary[400], fontWeight: '500' },
   emptyText: { fontSize: 14, color: Colors.gray[500], textAlign: 'center', paddingVertical: 20 },
-  requestCard: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: Colors.slate[800], borderRadius: 12, padding: 14, marginBottom: 8, borderWidth: 1, borderColor: Colors.gray[700] },
+  requestCard: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: Colors.slate[800], borderRadius: 14, padding: 14, marginBottom: 8, borderWidth: 1, borderColor: Colors.gray[700] },
   requestLeft: { flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 },
   catIcon: { fontSize: 20 },
   requestInfo: { flex: 1 },
@@ -186,7 +189,7 @@ const styles = StyleSheet.create({
   priorityBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
   priorityText: { fontSize: 10, fontWeight: '700', textTransform: 'uppercase' },
   statusDot: { width: 8, height: 8, borderRadius: 4 },
-  jobCard: { backgroundColor: Colors.slate[800], borderRadius: 12, padding: 14, marginBottom: 8, borderWidth: 1, borderColor: Colors.gray[700] },
+  jobCard: { backgroundColor: Colors.slate[800], borderRadius: 14, padding: 14, marginBottom: 8, borderWidth: 1, borderColor: Colors.gray[700] },
   jobTop: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   jobTitle: { fontSize: 14, fontWeight: '500', color: Colors.white },
   jobHandyman: { fontSize: 12, color: Colors.teal[400], marginTop: 2 },

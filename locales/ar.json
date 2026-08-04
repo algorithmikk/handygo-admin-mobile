@@ -1,5 +1,15 @@
 {
-  "app": { "name": "HandyGo", "tagline": "إدارة العقارات" },
+  "app": {
+    "name": "HandyGo",
+    "tagline": "إدارة العقارات"
+  },
+  "tabs": {
+    "dashboard": "لوحة التحكم",
+    "requests": "الطلبات",
+    "handymen": "الفنيون",
+    "tenants": "المستأجرون",
+    "settings": "الإعدادات"
+  },
   "auth": {
     "login": "تسجيل الدخول",
     "email": "البريد الإلكتروني",
@@ -34,6 +44,7 @@
     "cancelled": "ملغى",
     "search": "بحث في الطلبات...",
     "noRequests": "لا توجد طلبات",
+    "emptyHint": "ستظهر طلبات الصيانة من المستأجرين هنا.",
     "assignHandyman": "تعيين فني",
     "changePriority": "تغيير الأولوية",
     "cancel": "إلغاء الطلب",
@@ -47,7 +58,11 @@
     "description": "الوصف",
     "estimatedCost": "التكلفة المقدرة",
     "assignedTo": "معين إلى",
-    "selectHandyman": "اختر فنياً"
+    "selectHandyman": "اختر فنياً",
+    "assignSuccess": "تم تعيين الفني بنجاح",
+    "assignError": "فشل تعيين الفني",
+    "prioritySuccess": "تم تحديث الأولوية",
+    "priorityError": "فشل تحديث الأولوية"
   },
   "handymen": {
     "title": "الفنيون",
@@ -55,11 +70,27 @@
     "offline": "غير متصل",
     "search": "بحث عن فني...",
     "noHandymen": "لا يوجد فنيون",
+    "emptyHint": "سيظهر الفنيون هنا بعد تسجيلهم على المنصة.",
     "rating": "التقييم",
     "jobs": "المهام",
     "services": "الخدمات",
     "contact": "الاتصال",
-    "viewProfile": "عرض الملف"
+    "viewProfile": "عرض الملف",
+    "verification": "التحقق",
+    "approve": "موافقة",
+    "suspend": "تعليق",
+    "reject": "رفض",
+    "approveConfirm": "الموافقة على هذا الفني؟",
+    "suspendConfirm": "تعليق هذا الفني؟",
+    "rejectConfirm": "رفض هذا الفني؟",
+    "verifySuccess": "تم تحديث حالة الفني بنجاح",
+    "verifyError": "فشل تحديث حالة الفني",
+    "needsReview": "يحتاج مراجعة",
+    "statusPending": "في انتظار التحقق",
+    "statusSuspended": "معلق",
+    "statusActive": "نشط",
+    "statusOffline": "غير متصل",
+    "statusBusy": "مشغول"
   },
   "tenants": {
     "title": "المستأجرون",
@@ -77,7 +108,23 @@
     "language": "اللغة",
     "support": "الدعم",
     "logout": "تسجيل الخروج",
-    "version": "الإصدار"
+    "version": "الإصدار",
+    "subscription": "الاشتراك"
+  },
+  "billing": {
+    "activeTitle": "الاشتراك نشط",
+    "inactiveTitle": "الاشتراك غير نشط",
+    "inactiveSubtitle": "الحالة: {{status}}. تواصل مع الدعم لتفعيل HandyGo PM.",
+    "bannerLabel": "شريط حالة الاشتراك",
+    "status": {
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "none": "لا يوجد",
+      "unknown": "غير معروف",
+      "trialing": "تجريبي",
+      "past_due": "متأخر",
+      "canceled": "ملغى"
+    }
   },
   "common": {
     "aed": "درهم",
@@ -110,4 +157,3 @@
     "cancelled": "ملغى"
   }
 }
-

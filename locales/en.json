@@ -1,5 +1,12 @@
 {
   "app": { "name": "HandyGo", "tagline": "Property Management" },
+  "tabs": {
+    "dashboard": "Dashboard",
+    "requests": "Requests",
+    "handymen": "Handymen",
+    "tenants": "Tenants",
+    "settings": "Settings"
+  },
   "auth": {
     "login": "Sign In",
     "email": "Email Address",
@@ -34,6 +41,7 @@
     "cancelled": "Cancelled",
     "search": "Search requests...",
     "noRequests": "No requests found",
+    "emptyHint": "Maintenance requests from tenants will show up here.",
     "assignHandyman": "Assign Handyman",
     "changePriority": "Change Priority",
     "cancel": "Cancel Request",
@@ -47,7 +55,11 @@
     "description": "Description",
     "estimatedCost": "Estimated Cost",
     "assignedTo": "Assigned To",
-    "selectHandyman": "Select a Handyman"
+    "selectHandyman": "Select a Handyman",
+    "assignSuccess": "Handyman assigned successfully",
+    "assignError": "Failed to assign handyman",
+    "prioritySuccess": "Priority updated",
+    "priorityError": "Failed to update priority"
   },
   "handymen": {
     "title": "Handymen",
@@ -55,11 +67,27 @@
     "offline": "Offline",
     "search": "Search handymen...",
     "noHandymen": "No handymen found",
+    "emptyHint": "Handymen will appear here once they register on the platform.",
     "rating": "Rating",
     "jobs": "Jobs",
     "services": "Services",
     "contact": "Contact",
-    "viewProfile": "View Profile"
+    "viewProfile": "View Profile",
+    "verification": "Verification",
+    "approve": "Approve",
+    "suspend": "Suspend",
+    "reject": "Reject",
+    "approveConfirm": "Approve this handyman?",
+    "suspendConfirm": "Suspend this handyman?",
+    "rejectConfirm": "Reject this handyman?",
+    "verifySuccess": "Handyman status updated successfully",
+    "verifyError": "Failed to update handyman status",
+    "needsReview": "Needs review",
+    "statusPending": "Pending verification",
+    "statusSuspended": "Suspended",
+    "statusActive": "Active",
+    "statusOffline": "Offline",
+    "statusBusy": "Busy"
   },
   "tenants": {
     "title": "Tenants",
@@ -77,7 +105,23 @@
     "language": "Language",
     "support": "Support",
     "logout": "Log Out",
-    "version": "Version"
+    "version": "Version",
+    "subscription": "Subscription"
+  },
+  "billing": {
+    "activeTitle": "Subscription active",
+    "inactiveTitle": "Subscription inactive",
+    "inactiveSubtitle": "Status: {{status}}. Contact support to activate HandyGo PM.",
+    "bannerLabel": "Subscription status banner",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "none": "None",
+      "unknown": "Unknown",
+      "trialing": "Trial",
+      "past_due": "Past due",
+      "canceled": "Canceled"
+    }
   },
   "common": {
     "aed": "AED",

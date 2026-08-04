@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, RefreshControl, TextInput, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, RefreshControl, TextInput, ActivityIndicator, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Search, Star, Phone, CheckCircle, XCircle } from 'lucide-react-native';
+import { Search, Star, Phone, CheckCircle, XCircle, Wrench, AlertTriangle } from 'lucide-react-native';
 import { handymanService } from '@/src/services/handymanService';
 import { getCategoryInfo } from '@/src/lib/mockData';
+import { getHandymanStatusStyle } from '@/src/lib/handymanStatus';
 import { Colors } from '@/constants/Colors';
 import type { Handyman } from '@/src/types';
 
@@ -36,13 +37,25 @@ export default function HandymenScreen() {
   });
 
   const onlineCount = handymen.filter(h => h.available).length;
+  const pendingCount = handymen.filter(h => (h.status || '').toUpperCase() === 'PENDING_VERIFICATION').length;
+
+  const handlePhonePress = (phone: string) => {
+    if (phone) Linking.openURL(`tel:${phone}`);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>{t('handymen.title')}</Text>
-        <Text style={styles.headerCount}>{onlineCount}/{handymen.length} online</Text>
+        <Text style={styles.headerCount}>{onlineCount}/{handymen.length} {t('handymen.online').toLowerCase()}</Text>
       </View>
+
+      {pendingCount > 0 && (
+        <View style={styles.reviewBanner}>
+          <AlertTriangle size={16} color={Colors.amber[400]} />
+          <Text style={styles.reviewText}>{pendingCount} {t('handymen.needsReview')}</Text>
+        </View>
+      )}
 
       <View style={styles.searchBar}>
         <Search size={18} color={Colors.gray[400]} />
@@ -52,7 +65,7 @@ export default function HandymenScreen() {
 
       <View style={styles.toggleRow}>
         <TouchableOpacity style={[styles.toggleChip, !showOnline && styles.toggleActive]} onPress={() => setShowOnline(false)}>
-          <Text style={[styles.toggleText, !showOnline && styles.toggleTextActive]}>All ({handymen.length})</Text>
+          <Text style={[styles.toggleText, !showOnline && styles.toggleTextActive]}>{t('requests.all')} ({handymen.length})</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.toggleChip, showOnline && styles.toggleActive]} onPress={() => setShowOnline(true)}>
           <Text style={[styles.toggleText, showOnline && styles.toggleTextActive]}>{t('handymen.online')} ({onlineCount})</Text>
@@ -64,46 +77,64 @@ export default function HandymenScreen() {
       ) : (
         <ScrollView style={styles.list} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary[400]} />}>
           {filtered.length === 0 ? (
-            <Text style={styles.emptyText}>{t('handymen.noHandymen')}</Text>
+            <View style={styles.empty}>
+              <Wrench size={36} color={Colors.gray[600]} />
+              <Text style={styles.emptyTitle}>{t('handymen.noHandymen')}</Text>
+              <Text style={styles.emptyHint}>{t('handymen.emptyHint')}</Text>
+            </View>
           ) : (
-            filtered.map(h => (
-              <TouchableOpacity key={h.id} style={styles.card} onPress={() => router.push(`/handyman/${h.id}`)}>
-                <View style={styles.cardTop}>
-                  <View style={styles.avatar}>
-                    <Text style={styles.avatarText}>{h.name.charAt(0)}</Text>
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <View style={styles.nameRow}>
-                      <Text style={styles.name}>{h.name}</Text>
-                      {h.available ?
-                        <View style={styles.onlineDot}><CheckCircle size={14} color={Colors.primary[400]} /></View> :
-                        <View style={styles.offlineDot}><XCircle size={14} color={Colors.gray[500]} /></View>
-                      }
+            filtered.map(h => {
+              const statusStyle = getHandymanStatusStyle(h.status);
+              const isPending = (h.status || '').toUpperCase() === 'PENDING_VERIFICATION';
+              return (
+                <TouchableOpacity key={h.id} style={styles.card} onPress={() => router.push(`/handyman/${h.id}`)}>
+                  <View style={styles.cardTop}>
+                    <View style={styles.avatar}>
+                      <Text style={styles.avatarText}>{h.name.charAt(0)}</Text>
                     </View>
-                    <View style={styles.ratingRow}>
-                      <Star size={12} color="#fbbf24" fill="#fbbf24" />
-                      <Text style={styles.ratingText}>{h.rating}</Text>
-                      <Text style={styles.dot}>·</Text>
-                      <Text style={styles.jobsText}>{h.completedJobs} jobs</Text>
-                    </View>
-                  </View>
-                  <TouchableOpacity style={styles.phoneBtn} onPress={() => {}}>
-                    <Phone size={16} color={Colors.primary[400]} />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.services}>
-                  {h.services.map(s => {
-                    const cat = getCategoryInfo(s);
-                    return (
-                      <View key={s} style={[styles.serviceChip, { borderColor: (cat?.color || '#666') + '40' }]}>
-                        <Text style={styles.serviceIcon}>{cat?.icon}</Text>
-                        <Text style={styles.serviceLabel}>{cat?.label}</Text>
+                    <View style={{ flex: 1 }}>
+                      <View style={styles.nameRow}>
+                        <Text style={styles.name}>{h.name}</Text>
+                        {h.available ?
+                          <CheckCircle size={14} color={Colors.primary[400]} /> :
+                          <XCircle size={14} color={Colors.gray[500]} />
+                        }
                       </View>
-                    );
-                  })}
-                </View>
-              </TouchableOpacity>
-            ))
+                      <View style={styles.ratingRow}>
+                        <Star size={12} color="#fbbf24" fill="#fbbf24" />
+                        <Text style={styles.ratingText}>{h.rating}</Text>
+                        <Text style={styles.dot}>·</Text>
+                        <Text style={styles.jobsText}>{h.completedJobs} {t('handymen.jobs').toLowerCase()}</Text>
+                      </View>
+                      <View style={[styles.statusBadge, { backgroundColor: statusStyle.bg }]}>
+                        <Text style={[styles.statusText, { color: statusStyle.color }]}>{t(statusStyle.labelKey)}</Text>
+                      </View>
+                    </View>
+                    <TouchableOpacity
+                      style={styles.phoneBtn}
+                      onPress={() => handlePhonePress(h.phone)}
+                      accessibilityRole="button"
+                      accessibilityLabel={h.phone}>
+                      <Phone size={16} color={Colors.primary[400]} />
+                    </TouchableOpacity>
+                  </View>
+                  {isPending && (
+                    <Text style={styles.reviewLink}>{t('handymen.needsReview')} →</Text>
+                  )}
+                  <View style={styles.services}>
+                    {h.services.map(s => {
+                      const cat = getCategoryInfo(s);
+                      return (
+                        <View key={s} style={[styles.serviceChip, { borderColor: (cat?.color || '#666') + '40' }]}>
+                          <Text style={styles.serviceIcon}>{cat?.icon}</Text>
+                          <Text style={styles.serviceLabel}>{cat?.label}</Text>
+                        </View>
+                      );
+                    })}
+                  </View>
+                </TouchableOpacity>
+              );
+            })
           )}
           <View style={{ height: 24 }} />
         </ScrollView>
@@ -118,6 +149,8 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 16, paddingBottom: 8 },
   headerTitle: { fontSize: 24, fontWeight: 'bold', color: Colors.white },
   headerCount: { fontSize: 13, color: Colors.primary[400] },
+  reviewBanner: { flexDirection: 'row', alignItems: 'center', gap: 8, marginHorizontal: 20, marginBottom: 12, padding: 10, backgroundColor: Colors.amber[500] + '15', borderRadius: 10, borderWidth: 1, borderColor: Colors.amber[500] + '30' },
+  reviewText: { fontSize: 13, color: Colors.amber[400], fontWeight: '500' },
   searchBar: { flexDirection: 'row', alignItems: 'center', marginHorizontal: 20, marginBottom: 12, paddingHorizontal: 14, height: 44, backgroundColor: Colors.slate[800], borderRadius: 12, borderWidth: 1, borderColor: Colors.gray[700], gap: 10 },
   searchInput: { flex: 1, fontSize: 15, color: Colors.white },
   toggleRow: { flexDirection: 'row', marginHorizontal: 20, marginBottom: 16, gap: 8 },
@@ -126,23 +159,25 @@ const styles = StyleSheet.create({
   toggleText: { fontSize: 13, color: Colors.gray[400], fontWeight: '500' },
   toggleTextActive: { color: Colors.primary[400] },
   list: { flex: 1 },
-  emptyText: { fontSize: 15, color: Colors.gray[500], textAlign: 'center', paddingVertical: 48 },
+  empty: { alignItems: 'center', paddingVertical: 56, paddingHorizontal: 32, gap: 8 },
+  emptyTitle: { fontSize: 16, fontWeight: '600', color: Colors.gray[400], marginTop: 8 },
+  emptyHint: { fontSize: 14, color: Colors.gray[500], textAlign: 'center', lineHeight: 20 },
   card: { marginHorizontal: 20, marginBottom: 10, padding: 14, backgroundColor: Colors.slate[800], borderRadius: 14, borderWidth: 1, borderColor: Colors.gray[700] },
   cardTop: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   avatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: Colors.primary[500] + '30', alignItems: 'center', justifyContent: 'center' },
   avatarText: { fontSize: 18, fontWeight: 'bold', color: Colors.primary[400] },
   nameRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   name: { fontSize: 15, fontWeight: '600', color: Colors.white },
-  onlineDot: {},
-  offlineDot: {},
   ratingRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 2 },
   ratingText: { fontSize: 12, color: Colors.gray[400] },
   dot: { color: Colors.gray[500] },
   jobsText: { fontSize: 12, color: Colors.gray[400] },
+  statusBadge: { alignSelf: 'flex-start', marginTop: 6, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 6 },
+  statusText: { fontSize: 10, fontWeight: '700', textTransform: 'uppercase' },
+  reviewLink: { fontSize: 12, color: Colors.amber[400], marginTop: 8, fontWeight: '500' },
   phoneBtn: { padding: 10, backgroundColor: Colors.primary[500] + '15', borderRadius: 10 },
   services: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 10 },
   serviceChip: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: Colors.slate[700], borderWidth: 1 },
   serviceIcon: { fontSize: 14 },
   serviceLabel: { fontSize: 11, color: Colors.gray[300] },
 });
-
