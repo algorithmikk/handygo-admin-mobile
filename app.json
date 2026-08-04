@@ -18,7 +18,8 @@
       "bundleIdentifier": "com.handygo.management",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "HandyGo needs your location to show nearby handymen.",
-        "NSCameraUsageDescription": "HandyGo needs camera access for property photos."
+        "NSCameraUsageDescription": "HandyGo needs camera access for property photos.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
